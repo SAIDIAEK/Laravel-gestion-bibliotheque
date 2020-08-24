@@ -24,7 +24,8 @@ class ouvrageRequest extends FormRequest
     public function rules()
     {
         return [
-            'titre' =>'required|min:3|max:80'
+            'titre' =>'required|min:3|max:80',
+            'domaine' =>'required|integer'
         ];
     }
 }

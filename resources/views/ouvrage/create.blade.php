@@ -78,14 +78,21 @@
                             </div>
                         <!-- </div> -->
                         <!-- <div class="form-group"> -->
-                            <label for="type" class="label col-md-2">Domaine :</label>
+                            <label for="domaine" class="label col-md-2">Domaine :</label>
                             <div class="col-md-4">
-                                <select name="type" class="form-control">
+                                <select name="domaine" class="form-control @if($errors->get('domaine')) is-invalid @endif">
                                     <option value="NULL"  hidden>--Domaine--</option>
                                     @foreach($types as $type)
                                         <option value="{{ $type->id }}">{{ $type->type }}</option>
                                     @endforeach
                                 </select>
+                                @if($errors->get('domaine'))
+                                    <ul>
+                                        @foreach($errors->get('domaine') as $message1)
+                                            <li> {{ $message1 }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
                             </div>
                         <!-- </div> -->
                     </div>
@@ -102,7 +109,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                       <input type="submit" class="form-control btn btn-primary" value="Enregistrer">
+                       <input type="submit" class="form-control btn btn-primary" value="Ajouter">
                     </div>
                 </form>
             </div>

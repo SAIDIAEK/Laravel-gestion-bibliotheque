@@ -32,7 +32,7 @@ class CreateOuvragesTable extends Migration
             $table->foreign('langue_id')->references('id')->on('langues');
 
             $table->integer('type_id')->unsigned()->nullable();
-            $table->foreign('type_id')->references('id')->on('types');
+            $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
 
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

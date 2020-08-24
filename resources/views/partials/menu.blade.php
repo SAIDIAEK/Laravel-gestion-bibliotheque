@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-static-top"> <!-- shadow-sm navbar-light bg-white --> 
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"> <!-- shadow-sm navbar-light bg-white --> 
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ url('/ouvrages') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -10,11 +10,10 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
@@ -33,7 +32,7 @@
                                 <a class="nav-link" href="{{ url('langues') }}">Langues</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('types') }}">Type-documents</a>
+                                <a class="nav-link" href="{{ url('types') }}">Domaine</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('auteurs') }}">Auteurs</a>

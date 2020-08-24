@@ -23,28 +23,35 @@ class OuvrageController extends Controller
 
     //lister la lise des ouvrage
     public function index(){
-        if((request('recherche_titre') == null)&&(request('recherche_auteur') == null)  ){
-            //$listouvrage = DB::table('ouvrages')->orderBy('titre')->paginate(5);
-            $listouvrage = Ouvrage::all()->sortBy('titre');
+        $recherche_titre = request('recherche_titre');
+        $recherche_auteur = request('recherche_auteur');
+        $type_id = request('type_id');
+        
+        if($type_id != null){
+            $listtypes = Type::where('id','=',$type_id)->get();
+            $listouvrage = Ouvrage::where('type_id', '=', $type_id)->get();
         }else{
-            $recherche_titre = request('recherche_titre');
-            $recherche_auteur = request('recherche_auteur');
-
-            if($recherche_titre == null)
-                $listouvrage = Ouvrage::join('auteurs','ouvrages.auteur_id','=', 'auteurs.id')
-                                        ->orWhere('auteurs.nom', 'like', '%'.$recherche_auteur.'%')
-                                        ->orderBy('titre')
-                                        ->get();
-            else if($recherche_auteur == null)
-                $listouvrage = Ouvrage::where('titre', 'like', '%'.$recherche_titre.'%')->get();
-            else 
-                $listouvrage = Ouvrage::join('auteurs','ouvrages.auteur_id','=', 'auteurs.id')
-                                ->where('titre', 'like', '%'.$recherche_titre.'%')
-                                ->orWhere('auteurs.nom', 'like', '%'.$recherche_auteur.'%')
-                                ->orderBy('titre')
-                                ->get();
+            $listtypes  = Type::all();
+            if(($recherche_titre == null)&&($recherche_auteur == null)  ){
+                //$listouvrage = DB::table('ouvrages')->orderBy('titre')->paginate(5);
+                $listouvrage = Ouvrage::orderBy('titre')->get();
+            }else{
+                if($recherche_titre == null)
+                    $listouvrage = Ouvrage::join('auteurs','ouvrages.auteur_id','=', 'auteurs.id')
+                                            ->orWhere('auteurs.nom', 'like', '%'.$recherche_auteur.'%')
+                                            ->orderBy('titre')
+                                            ->get();
+                else if($recherche_auteur == null)
+                    $listouvrage = Ouvrage::where('titre', 'like', '%'.$recherche_titre.'%')->get();
+                else 
+                    $listouvrage = Ouvrage::join('auteurs','ouvrages.auteur_id','=', 'auteurs.id')
+                                    ->where('titre', 'like', '%'.$recherche_titre.'%')
+                                    ->orWhere('auteurs.nom', 'like', '%'.$recherche_auteur.'%')
+                                    ->orderBy('titre')
+                                    ->get();
+            }
         }
-        return view('ouvrage.index', ['ouvrages' => $listouvrage]);
+        return view('ouvrage.index', ['ouvrages' => $listouvrage, 'types' => $listtypes]);
     }
 
     //Affiche le formulaire de création d'un ouvrage
@@ -56,7 +63,7 @@ class OuvrageController extends Controller
 
         $this->authorize('create', Ouvrage::class);
 
-        return view('ouvrage.create', ['auteurs' => $listauteurs, 'editions' => $listeditions, 
+        return view('ouvrage.create', ['auteurs' => $listauteurs, 'editions' => $listeditions,
                                         'langues' => $listlangues, 'types' => $listtypes]);
     }
 
@@ -71,7 +78,7 @@ class OuvrageController extends Controller
         $ouvrage->auteur_id = $request->input('auteur');
         $ouvrage->edition_id = $request->input('edition');
         $ouvrage->langue_id = $request->input('langue');
-        $ouvrage->type_id = $request->input('type');
+        $ouvrage->type_id = $request->input('domaine');
 
         if($request->hasFile('photo')){
             $ouvrage->photo = $request->photo->store('image');
@@ -82,6 +89,10 @@ class OuvrageController extends Controller
     /*********************************************************** *************************************************************/
 
         $ouvrage->save();
+
+        $type = Type::find($ouvrage->type_id);
+        $type->nbrOuvrages ++;
+        $type->save();
 
         session()->flash('success', 'L\'ouvrage a été bien ajouté !!');
 
@@ -114,7 +125,7 @@ class OuvrageController extends Controller
         $ouvrage->auteur_id = $request->input('auteur');
         $ouvrage->edition_id = $request->input('edition');
         $ouvrage->langue_id = $request->input('langue');
-        $ouvrage->type_id = $request->input('type');
+        $ouvrage->type_id = $request->input('domaine');
 
         if($request->hasFile('photo')){   
             $ouvrage->photo = $request->photo->store('image');
@@ -143,8 +154,13 @@ class OuvrageController extends Controller
         $ouvrage = Ouvrage::find($id);
 
         $this->authorize('delete', $ouvrage);
+        
+        $type = Type::find($ouvrage->type_id);
+        $type->nbrOuvrages --;
+        $type->save();
 
         $ouvrage->delete();
+
         return redirect('ouvrages');
     }
 }

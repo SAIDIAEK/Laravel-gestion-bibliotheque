@@ -38,7 +38,7 @@
                     <div class="form-group">
                         <label for="auteur">Auteur :</label>
                         <select name="auteur" class="form-control">
-                            <option value="NULL" disabled>--SVP choisis un auteur--</option>
+                            <option value="NULL">--SVP choisis un auteur--</option>
                             @foreach($auteurs as $auteur)
                                 <option value="{{ $auteur->id }}" <?php if($ouvrage->auteur_id == $auteur->id){echo("selected");}?>>
                                     {{ $auteur->nom . " " . $auteur->prenom }}
@@ -49,7 +49,7 @@
                     <div class="form-group">
                         <label for="edition">Edition :</label>
                         <select name="edition" class="form-control">
-                            <option value="NULL" disabled>--Edition--</option>
+                            <option value="NULL">--Edition--</option>
                             @foreach($editions as $edition)
                                 <option value="{{ $edition->id }}" <?php if($ouvrage->edition_id == $edition->id){echo("selected");}?>>{{ $edition->edition }}</option>
                             @endforeach
@@ -58,16 +58,16 @@
                     <div class="form-group">
                         <label for="langue">Langue :</label>
                         <select name="langue" class="form-control">
-                            <option value="NULL" disabled>--Langue--</option>
+                            <option value="NULL">--Langue--</option>
                             @foreach($langues as $langue)
                                 <option value="{{ $langue->id }}" <?php if($ouvrage->langue_id == $langue->id){echo("selected");}?>>{{ $langue->langue }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="type">Domaine :</label>
-                        <select name="type" class="form-control">
-                            <option value="NULL" disabled>--Domaine--</option>
+                        <label for="domaine">Domaine :</label>
+                        <select name="domaine" class="form-control">
+                            <option value="NULL">--Domaine--</option>
                             @foreach($types as $type)
                                 <option value="{{ $type->id }}" <?php if($ouvrage->type_id == $type->id){echo("selected");}?> >{{ $type->type }}</option>
                             @endforeach
